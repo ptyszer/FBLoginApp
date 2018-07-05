@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="{{ path('index') }}">Home <span class="sr-only">(current)</span></a>
+
+            {% if not user %}
+                <a type="button" class="btn" href="{{ path('user_login') }}">Login With Facebook</a>
+            {% else %}
+                <a class="nav-item nav-link">{{ user.firstName }} {{ user.lastName }}</a>
+                <a type="button" class="btn" href="{{ path('user_logout') }}">Log Out</a>
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
