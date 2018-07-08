@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
-use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Form\PostType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,16 +19,12 @@ class PostController extends Controller
     /**
      * @Route("/new", name="post_new", methods="GET|POST")
      */
-    public function new(Request $request, SessionInterface $session): Response
+    public function new(Request $request, SessionInterface $session, UserRepository $userRepository): Response
     {
         if(!$session->has('user')){
             return $this->redirectToRoute('user_login');
         }
-
-        $user = $this
-            ->getDoctrine()
-            ->getRepository(User::class)
-            ->findOneBy(['id' => $session->get('user')]);
+        $user = $userRepository->findOneBy(['id' => $session->get('user')]);
 
         $post = new Post();
         $post->setUser($user);
@@ -54,16 +50,13 @@ class PostController extends Controller
     /**
      * @Route("/{id}/edit", name="post_edit", methods="GET|POST")
      */
-    public function edit(Request $request, Post $post, SessionInterface $session): Response
+    public function edit(Request $request, Post $post, SessionInterface $session, UserRepository $userRepository): Response
     {
         if(!$session->has('user')){
             return $this->redirectToRoute('user_login');
         }
 
-        $user = $this
-            ->getDoctrine()
-            ->getRepository(User::class)
-            ->findOneBy(['id' => $session->get('user')]);
+        $user = $userRepository->findOneBy(['id' => $session->get('user')]);
 
         if($post->getUser() != $user){
             return $this->redirectToRoute('index');
